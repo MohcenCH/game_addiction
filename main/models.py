@@ -15,7 +15,9 @@ class User(AbstractBaseUser):
     date_of_birth = models.DateField()
     email = models.EmailField()
     password = models.CharField(max_length=255)
-
+    is_superuser = models.BooleanField(default=False)
+    is_staff = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
     objects = UserManager()
 
 
@@ -36,22 +38,9 @@ class Doctor(models.Model):
     planned_therapy_sessions = models.IntegerField()
 
 
-class Admin(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    role = models.CharField(max_length=255)
-
-
 class Questionnaire(models.Model):
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
     date_of_questionnaire = models.DateField()
-
-
-class QuestionnaireResponse(models.Model):
-    questionnaire = models.ForeignKey(Questionnaire, on_delete=models.CASCADE)
-    question = models.IntegerField()
-    response_to_question = models.TextField()
-    score_assigned_to_response = models.IntegerField()
-    comments_on_response = models.TextField()
 
 
 class Question(models.Model):
@@ -60,6 +49,15 @@ class Question(models.Model):
     response_options = models.TextField()
     points_assigned_to_question = models.IntegerField()
     display_order_in_questionnaire = models.IntegerField()
+    possible_question_dependencies = models.TextField()
+
+
+class QuestionnaireResponse(models.Model):
+    questionnaire = models.ForeignKey(Questionnaire, on_delete=models.CASCADE)
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    response_to_question = models.TextField()
+    score_assigned_to_response = models.IntegerField()
+    comments_on_response = models.TextField()
 
 
 class Alert(models.Model):
