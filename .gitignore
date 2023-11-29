@@ -8,6 +8,7 @@ __pycache__/
 
 # Django logs and debug files:
 *.log
+*.pyc
 
 # Frontend settings
 node_modules
