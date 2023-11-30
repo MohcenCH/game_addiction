@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "main",
     "rest_framework",
+    "rest_framework.authtoken",
+    "dj_rest_auth",
 ]
 
 MIDDLEWARE = [
@@ -82,6 +84,12 @@ DATABASES = {
         "NAME": BASE_DIR / "db.sqlite3",
     }
 }
+
+AUTH_USER_MODEL = "main.user"
+ACCOUNT_USER_MODEL_USERNAME_FIELD = "email"
+ACCOUNT_AUTHENTICATION_METHOD = "email"
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False
 
 
 # Password validation
