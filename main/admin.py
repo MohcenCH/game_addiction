@@ -4,8 +4,9 @@ from .models import (
     Patient,
     Doctor,
     Questionnaire,
-    QuestionnaireResponse,
     Question,
+    AnswerOption,
+    QuestionResponse,
     Alert,
     Message,
     UsageStatistic,
@@ -15,7 +16,8 @@ admin.site.register(User)
 admin.site.register(Patient)
 admin.site.register(Doctor)
 admin.site.register(Questionnaire)
-admin.site.register(QuestionnaireResponse)
+admin.site.register(QuestionResponse)
+admin.site.register(AnswerOption)
 admin.site.register(Question)
 admin.site.register(Alert)
 admin.site.register(Message)

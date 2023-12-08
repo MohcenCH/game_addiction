@@ -20,16 +20,21 @@ class User(AbstractBaseUser):
     is_active = models.BooleanField(default=True)
     objects = UserManager()
 
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}"
+
 
 class Patient(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    addiction_level = models.CharField(max_length=255)
-    average_hours_of_play_per_week = models.IntegerField()
-    average_months_of_play = models.IntegerField()
-    insomnia_score = models.IntegerField()
-    excessive_sleepiness_score = models.IntegerField()
-    anxiety_score = models.IntegerField()
-    depression_score = models.IntegerField()
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    addiction_level = models.FloatField(max_length=255, null=True)
+    average_hours_of_play_per_week = models.FloatField(null=True)
+    average_months_of_play = models.FloatField(null=True)
+    insomnia_score = models.FloatField(null=True)
+    excessive_sleepiness_score = models.FloatField(null=True)
+    anxiety_score = models.FloatField(null=True)
+    depression_score = models.FloatField(null=True)
+    def __str__(self):
+        return f"{self.user.first_name} {self.user.last_name}"
 
 
 class Doctor(models.Model):
@@ -37,27 +42,38 @@ class Doctor(models.Model):
     specialty = models.CharField(max_length=255)
     planned_therapy_sessions = models.IntegerField()
 
+    def __str__(self):
+        return f"{self.user.first_name} {self.user.last_name}"
+
 
 class Questionnaire(models.Model):
-    patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
+    patient = models.OneToOneField(Patient, on_delete=models.CASCADE)
     date_of_questionnaire = models.DateField()
-
 
 class Question(models.Model):
     text_of_question = models.TextField()
     question_type = models.CharField(max_length=255)
-    response_options = models.TextField()
-    points_assigned_to_question = models.IntegerField()
-    display_order_in_questionnaire = models.IntegerField()
-    possible_question_dependencies = models.TextField()
+    def __str__(self):
+        return self.text_of_question
 
+class AnswerOption(models.Model):
+    question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='answerOptions')
+    answer_text = models.TextField()
+    answer_point = models.FloatField()
+    def __str__(self):
+        return self.answer_text
 
-class QuestionnaireResponse(models.Model):
+class QuestionResponse(models.Model):
+    answer = models.ForeignKey(AnswerOption, on_delete=models.CASCADE)
     questionnaire = models.ForeignKey(Questionnaire, on_delete=models.CASCADE)
-    question = models.ForeignKey(Question, on_delete=models.CASCADE)
-    response_to_question = models.TextField()
-    score_assigned_to_response = models.IntegerField()
-    comments_on_response = models.TextField()
+    def __str__(self):
+        return str(self.questionnaire)+', '+str(self.answer.answer_text)
+
+    
+
+# class QuestionnaireResponse(models.Model):
+#     questionnaire = models.ForeignKey(Questionnaire, on_delete=models.CASCADE)
+#     question_response = models.ForeignKey(QuestionResponse, on_delete=models.CASCADE, null=True)
 
 
 class Alert(models.Model):
