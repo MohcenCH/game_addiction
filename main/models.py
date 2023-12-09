@@ -12,13 +12,20 @@ class User(AbstractBaseUser):
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
     gender = models.CharField(max_length=10, choices=GENDER_CHOICES)
-    date_of_birth = models.DateField()
-    email = models.EmailField()
+    date_of_birth = models.DateField(null=True,blank=True)
+    email = models.EmailField(unique=True)
     password = models.CharField(max_length=255)
     is_superuser = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     objects = UserManager()
+    USERNAME_FIELD = "email"
+
+    def has_perm(self, perm, obj=None):
+        return self.is_superuser
+    
+    def has_module_perms(self, app_label):
+        return True
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"

@@ -1,3 +1,4 @@
+from dj_rest_auth.views import LoginView
 from django.db import IntegrityError
 from django.shortcuts import render
 from rest_framework.response import Response
@@ -7,6 +8,15 @@ from.serializers import *
 from .models import *
 from django.views.decorators.csrf import csrf_exempt
 from django.http import Http404
+
+
+class CustomLogin(LoginView):
+    def get_response(self):
+        response = super().get_response()
+        print("test")
+        return response
+
+
 
 
 @api_view(['GET', 'POST'])
