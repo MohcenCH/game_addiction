@@ -12,3 +12,6 @@ __pycache__/
 
 # Frontend settings
 node_modules
+
+# db
+db.sqlite3
